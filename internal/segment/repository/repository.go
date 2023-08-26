@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segments/usecase"
+	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase"
 	"github.com/Inspirate789/backend-trainee-assignment-2023/pkg/sqlx_utils"
 	"github.com/jmoiron/sqlx"
 	"log/slog"

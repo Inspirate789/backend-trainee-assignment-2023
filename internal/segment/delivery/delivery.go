@@ -2,7 +2,7 @@ package delivery
 
 import (
 	"fmt"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segments/usecase/dto"
+	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase/dto"
 	"github.com/gofiber/fiber/v2"
 	"log/slog"
 )

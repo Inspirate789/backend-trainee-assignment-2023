@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segments/delivery"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segments/usecase/dto"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segments/usecase/errors"
+	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/delivery"
+	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase/dto"
+	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase/errors"
 	"log/slog"
 	"time"
 )

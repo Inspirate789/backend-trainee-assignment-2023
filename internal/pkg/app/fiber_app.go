@@ -2,7 +2,7 @@ package app
 
 import (
 	"context"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segments/delivery"
+	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/delivery"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
