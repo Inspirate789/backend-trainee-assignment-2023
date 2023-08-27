@@ -2,8 +2,10 @@ package app
 
 import (
 	"context"
+	"fmt"
 	segmentDelivery "github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/delivery"
 	userDelivery "github.com/Inspirate789/backend-trainee-assignment-2023/internal/user/delivery"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -36,11 +38,11 @@ func NewFiberApp(settings ApiSettings, useCases UseCases, log *slog.Logger) WebA
 		Output: slog.NewLogLogger(log.Handler(), slog.LevelDebug).Writer(),
 	}))
 
-	//app.Get("/swagger/*", swagger.New(swagger.Config{ // TODO
-	//	URL:          fmt.Sprintf("http://localhost:%s/swagger/doc.json", port),
-	//	DeepLinking:  false,
-	//	DocExpansion: "none",
-	//}))
+	app.Get("/swagger/*", swagger.New(swagger.Config{
+		URL:          fmt.Sprintf("http://localhost:%s/swagger/doc.json", settings.Port),
+		DeepLinking:  false,
+		DocExpansion: "none",
+	}))
 
 	api := app.Group(settings.ApiPrefix)
 	segmentDelivery.NewFiberDelivery(api, useCases.SegmentUseCase, log)

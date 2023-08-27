@@ -1,0 +1,309 @@
+basePath: /api/v1
+definitions:
+  github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentDTO:
+    properties:
+      name:
+        description: |-
+          Name
+          required: true
+          min length: 1
+          example: "AVITO_VOICE_MESSAGES"
+        type: string
+      ttl:
+        description: |-
+          TTL - segment existing time (in hours)
+          required: false
+          min: 1
+          example: 72
+        type: integer
+      user_percentage:
+        description: |-
+          UserPercentage - part of all users that segment contains (in %)
+          required: false
+          min: 0
+          max: 100
+          example: 50
+        type: number
+    type: object
+  github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentNameDTO:
+    properties:
+      name:
+        description: |-
+          Name
+          required: true
+          min length: 1
+          example: "AVITO_VOICE_MESSAGES"
+        type: string
+    type: object
+  github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserDTO:
+    properties:
+      user_id:
+        description: |-
+          UserID
+          required: true
+          min: 1
+          example: 75
+        type: integer
+    type: object
+  github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserHistoryInputDTO:
+    properties:
+      year_month:
+        description: |-
+          YearMonth - Year and month in history
+          required: true
+          min length: 1
+          example: "2023-08"
+        type: string
+    type: object
+  github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO:
+    properties:
+      user_id:
+        description: |-
+          UserID
+          required: true
+          min: 1
+          example: 75
+        type: integer
+    type: object
+  github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserSegmentsInputDTO:
+    properties:
+      new_segment_names:
+        description: |-
+          NewSegmentNames - segment names to adding
+          required: false
+          min items: 0
+          example: ["AVITO_VOICE_MESSAGES", "AVITO_DISCOUNT_50"]
+        items:
+          type: string
+        type: array
+      old_segment_names:
+        description: |-
+          OldSegmentNames - segment names to removing
+          required: false
+          min items: 0
+          example: ["AVITO_VOICE_MESSAGES", "AVITO_PERFORMANCE_VAS", "AVITO_DISCOUNT_30"]
+        items:
+          type: string
+        type: array
+      ttl:
+        description: |-
+          TTL - segment existing time (in hours)
+          required: false
+          min: 1
+          example: 72
+        type: integer
+      user_id:
+        description: |-
+          UserID
+          required: true
+          min: 1
+          example: 75
+        type: integer
+    type: object
+  github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserSegmentsOutputDTO:
+    properties:
+      segment_names:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: andreysapozhkov535@gmail.com
+    name: API Support
+  description: This is an application API.
+  title: Application API
+  version: 0.1.0
+paths:
+  /segment:
+    delete:
+      consumes:
+      - application/json
+      description: delete segment
+      parameters:
+      - description: Segment name
+        in: body
+        name: SegmentDTO
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentNameDTO'
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete segment.
+      tags:
+      - Segment API
+    post:
+      consumes:
+      - application/json
+      description: add new segment
+      parameters:
+      - description: Segment data
+        in: body
+        name: SegmentDTO
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentDTO'
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add new segment.
+      tags:
+      - Segment API
+  /user:
+    delete:
+      consumes:
+      - application/json
+      description: delete user
+      parameters:
+      - description: User ID
+        in: body
+        name: UserInputDTO
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO'
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete user.
+      tags:
+      - User API
+    post:
+      consumes:
+      - application/json
+      description: add new user
+      parameters:
+      - description: User data
+        in: body
+        name: UserDTO
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserDTO'
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add new user.
+      tags:
+      - User API
+  /user/history:
+    get:
+      consumes:
+      - application/json
+      description: get the history of changing user segments; returns the web link
+        to csv file with report
+      parameters:
+      - description: Year and month in history
+        in: body
+        name: UserHistoryInputDTO
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserHistoryInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get the history of changing user segments.
+      tags:
+      - User API
+  /user/segments:
+    get:
+      consumes:
+      - application/json
+      description: get user segments
+      parameters:
+      - description: User ID
+        in: body
+        name: UserInputDTO
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserSegmentsOutputDTO'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get user segments.
+      tags:
+      - User API
+    patch:
+      consumes:
+      - application/json
+      description: change user segments
+      parameters:
+      - description: Old and new user segments
+        in: body
+        name: UserSegmentsInputDTO
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserSegmentsInputDTO'
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Change user segments.
+      tags:
+      - User API
+schemes:
+- http
+swagger: "2.0"

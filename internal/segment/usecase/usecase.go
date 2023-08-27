@@ -34,7 +34,7 @@ func (u *segmentUseCase) AddSegment(segmentData dto.SegmentDTO) error {
 	return nil
 }
 
-func (u *segmentUseCase) RemoveSegment(segmentData dto.SegmentDTO) error {
+func (u *segmentUseCase) RemoveSegment(segmentData dto.SegmentNameDTO) error {
 	err := u.repo.RemoveSegment(segmentData.Name)
 	if err != nil {
 		u.logger.Error(err.Error())

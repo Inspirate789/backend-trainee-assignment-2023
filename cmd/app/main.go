@@ -11,6 +11,7 @@ import (
 	userUseCase "github.com/Inspirate789/backend-trainee-assignment-2023/internal/user/usecase"
 	"github.com/Inspirate789/backend-trainee-assignment-2023/pkg/influx"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -64,6 +65,14 @@ func shutdownApp(webApp app.WebApp, logger *slog.Logger) {
 	logger.Debug("web app exited")
 }
 
+//	@title			Application API
+//	@version		0.1.0
+//	@description	This is an application API.
+//	@contact.name	API Support
+//	@contact.email	andreysapozhkov535@gmail.com
+//	@host			localhost:8080
+//	@BasePath		/api/v1
+//	@Schemes		http
 func main() {
 	err := readConfig()
 	if err != nil {
@@ -77,7 +86,7 @@ func main() {
 		viper.GetString("INFLUXDB_URL"),
 		viper.GetString("INFLUXDB_TOKEN"),
 		viper.GetString("INFLUXDB_ORG"),
-		viper.GetString("INFLUXDB_BACKEND_BUCKET_NAME"),
+		viper.GetString("INFLUXDB_APP_BUCKET_NAME"),
 	)
 	if err != nil {
 		panic(err)
@@ -107,7 +116,7 @@ func main() {
 	segmentUC := segmentUseCase.NewUseCase(segmentRepo, logger)
 
 	userSqlRepo := userSqlRepository.NewSqlxRepository(db, logger)
-	userFsRepo := userFsRepository.NewFsRepository(viper.GetString("VOLUME_PATH"), logger)
+	userFsRepo := userFsRepository.NewFsRepository(viper.GetString("APP_VOLUME_PATH"), logger)
 	userUC := userUseCase.NewUseCase(userSqlRepo, userFsRepo, logger)
 
 	useCases := app.UseCases{
@@ -116,7 +125,7 @@ func main() {
 	}
 
 	settings := app.ApiSettings{
-		Port:      viper.GetString("PORT"),
+		Port:      viper.GetString("APP_PORT"),
 		ApiPrefix: viper.GetString("API_PREFIX"),
 	}
 

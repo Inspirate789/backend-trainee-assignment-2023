@@ -21,6 +21,17 @@ func NewFiberDelivery(api fiber.Router, useCase UseCase, logger *slog.Logger) {
 	api.Delete("/segment", handler.deleteSegment)
 }
 
+// postSegment godoc
+//
+//	@Summary		Add new segment.
+//	@Description	add new segment
+//	@Tags			Segment API
+//	@Param			SegmentDTO	body	dto.SegmentDTO	true	"Segment data"
+//	@Accept			json
+//	@Success		200
+//	@Failure		422	{object}	string
+//	@Failure		500	{object}	string
+//	@Router			/segment [post]
 func (d *fiberSegmentDelivery) postSegment(ctx *fiber.Ctx) error {
 	var body dto.SegmentDTO
 	err := ctx.BodyParser(&body)
@@ -43,8 +54,19 @@ func (d *fiberSegmentDelivery) postSegment(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(fiber.StatusOK)
 }
 
+// deleteSegment godoc
+//
+//	@Summary		Delete segment.
+//	@Description	delete segment
+//	@Tags			Segment API
+//	@Param			SegmentDTO	body	dto.SegmentNameDTO	true	"Segment name"
+//	@Accept			json
+//	@Success		200
+//	@Failure		422	{object}	string
+//	@Failure		500	{object}	string
+//	@Router			/segment [delete]
 func (d *fiberSegmentDelivery) deleteSegment(ctx *fiber.Ctx) error {
-	var body dto.SegmentDTO
+	var body dto.SegmentNameDTO
 	err := ctx.BodyParser(&body)
 	if err != nil {
 		d.logger.Error(err.Error())

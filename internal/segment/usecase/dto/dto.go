@@ -14,15 +14,44 @@ func ParseUserPercentage(ptr *float64) float64 {
 	return *ptr
 }
 
-func ParseTTL(ptr *time.Duration) time.Duration {
+func ParseTTL(ptr *int) time.Duration {
 	if ptr == nil {
 		return NoTTL
 	}
-	return *ptr
+	return time.Duration(*ptr) * time.Hour
 }
 
+// SegmentDTO godoc
+//
+// swagger:model
 type SegmentDTO struct {
-	Name           string         `json:"name"`
-	UserPercentage *float64       `json:"user_percentage,omitempty"`
-	TTL            *time.Duration `json:"ttl,omitempty"`
+	// Name
+	// required: true
+	// min length: 1
+	// example: "AVITO_VOICE_MESSAGES"
+	Name string `json:"name"`
+
+	// UserPercentage - part of all users that segment contains (in %)
+	// required: false
+	// min: 0
+	// max: 100
+	// example: 50
+	UserPercentage *float64 `json:"user_percentage,omitempty"`
+
+	// TTL - segment existing time (in hours)
+	// required: false
+	// min: 1
+	// example: 72
+	TTL *int `json:"ttl,omitempty"`
+}
+
+// SegmentNameDTO godoc
+//
+// swagger:model
+type SegmentNameDTO struct {
+	// Name
+	// required: true
+	// min length: 1
+	// example: "AVITO_VOICE_MESSAGES"
+	Name string `json:"name"`
 }

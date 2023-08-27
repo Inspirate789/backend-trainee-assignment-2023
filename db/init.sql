@@ -87,7 +87,7 @@ returns table (
 as $func$
 declare users_count bigint;
 begin
-    select count(u.id) * user_percentage / 100
+    select count(u.id) * user_percentage / 100.0
     from public.users u
     into users_count;
 
