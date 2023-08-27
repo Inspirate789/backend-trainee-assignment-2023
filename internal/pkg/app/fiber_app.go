@@ -2,7 +2,8 @@ package app
 
 import (
 	"context"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/delivery"
+	segmentDelivery "github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/delivery"
+	userDelivery "github.com/Inspirate789/backend-trainee-assignment-2023/internal/user/delivery"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -15,15 +16,24 @@ type fiberApp struct {
 	logger *slog.Logger
 }
 
-// NewFiberApp TODO: fix signature
-func NewFiberApp(port string, apiPrefix string, useCase delivery.SegmentUseCase, log *slog.Logger, level slog.Level) WebApp {
+type ApiSettings struct {
+	Port      string
+	ApiPrefix string
+}
+
+type UseCases struct {
+	SegmentUseCase segmentDelivery.UseCase
+	UserUseCase    userDelivery.UseCase
+}
+
+func NewFiberApp(settings ApiSettings, useCases UseCases, log *slog.Logger) WebApp {
 	app := fiber.New()
 
 	app.Use(recover.New())
 	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
 		Format: "${pid} ${locals:requestid} ${status} - ${latency} ${method} ${path}\n",
-		Output: slog.NewLogLogger(log.Handler(), level).Writer(),
+		Output: slog.NewLogLogger(log.Handler(), slog.LevelDebug).Writer(),
 	}))
 
 	//app.Get("/swagger/*", swagger.New(swagger.Config{ // TODO
@@ -32,8 +42,9 @@ func NewFiberApp(port string, apiPrefix string, useCase delivery.SegmentUseCase,
 	//	DocExpansion: "none",
 	//}))
 
-	api := app.Group(apiPrefix)
-	delivery.NewFiberSegmentDelivery(api, useCase, log)
+	api := app.Group(settings.ApiPrefix)
+	segmentDelivery.NewFiberDelivery(api, useCases.SegmentUseCase, log)
+	userDelivery.NewFiberDelivery(api, useCases.UserUseCase, log)
 
 	return &fiberApp{
 		fiber:  app,

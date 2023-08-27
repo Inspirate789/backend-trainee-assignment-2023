@@ -8,11 +8,11 @@ import (
 )
 
 type fiberSegmentDelivery struct {
-	useCase SegmentUseCase
+	useCase UseCase
 	logger  *slog.Logger
 }
 
-func NewFiberSegmentDelivery(api fiber.Router, useCase SegmentUseCase, logger *slog.Logger) {
+func NewFiberDelivery(api fiber.Router, useCase UseCase, logger *slog.Logger) {
 	handler := &fiberSegmentDelivery{
 		useCase: useCase,
 		logger:  logger.WithGroup("fiberSegmentDelivery"),
@@ -30,7 +30,7 @@ func (d *fiberSegmentDelivery) postSegment(ctx *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	d.logger.Info("receive body", slog.String("body", fmt.Sprintf("%v", body)))
+	d.logger.Debug("request body received", slog.String("body", fmt.Sprintf("%v", body)))
 
 	err = d.useCase.AddSegment(body)
 	if err != nil {
@@ -52,7 +52,7 @@ func (d *fiberSegmentDelivery) deleteSegment(ctx *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	d.logger.Info("request body received", slog.String("body", fmt.Sprintf("%v", body)))
+	d.logger.Debug("request body received", slog.String("body", fmt.Sprintf("%v", body)))
 
 	err = d.useCase.RemoveSegment(body)
 	if err != nil {

@@ -1,7 +1,7 @@
 -- Table creation
 
 create table if not exists public.users(
-    id bigint generated always as identity primary key
+    id bigint unique
 );
 
 create table if not exists public.segments(
@@ -138,6 +138,20 @@ $func$ language plpgsql;
 create or replace trigger delete_segment
 before delete on public.segments
 for each row execute procedure delete_users_segment_trigger();
+
+create or replace function delete_user_segments_trigger()
+returns trigger
+as $func$
+begin
+    delete from public.users_and_segments us
+    where us.user_id = new.id;
+    return new;
+end;
+$func$ language plpgsql;
+
+create or replace trigger delete_user
+before delete on public.users
+for each row execute procedure delete_user_segments_trigger();
 
 -- Managing history
 

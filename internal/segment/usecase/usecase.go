@@ -5,38 +5,26 @@ import (
 	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase/dto"
 	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase/errors"
 	"log/slog"
-	"time"
 )
 
 type segmentUseCase struct {
-	repo   SegmentRepository
+	repo   Repository
 	logger *slog.Logger
 }
 
-func NewSegmentUseCase(repo SegmentRepository, logger *slog.Logger) delivery.SegmentUseCase {
+func NewUseCase(repo Repository, logger *slog.Logger) delivery.UseCase {
 	return &segmentUseCase{
 		repo:   repo,
 		logger: logger.WithGroup("segmentUseCase"),
 	}
 }
 
-func (u *segmentUseCase) parseUserPercentage(segmentData dto.SegmentDTO) float64 {
-	if segmentData.UserPercentage == nil {
-		return EmptySegment
-	}
-	return *segmentData.UserPercentage
-}
-
-func (u *segmentUseCase) parseTTL(segmentData dto.SegmentDTO) time.Duration {
-	if segmentData.TTL == nil {
-		return NoTTL
-	}
-	return *segmentData.TTL
-}
-
 func (u *segmentUseCase) AddSegment(segmentData dto.SegmentDTO) error {
-	err := u.repo.AddSegment(segmentData.Name, u.parseUserPercentage(segmentData), u.parseTTL(segmentData))
-
+	err := u.repo.AddSegment(
+		segmentData.Name,
+		dto.ParseUserPercentage(segmentData.UserPercentage),
+		dto.ParseTTL(segmentData.TTL),
+	)
 	if err != nil {
 		u.logger.Error(err.Error())
 		return errors.AddSegmentErr
@@ -48,7 +36,6 @@ func (u *segmentUseCase) AddSegment(segmentData dto.SegmentDTO) error {
 
 func (u *segmentUseCase) RemoveSegment(segmentData dto.SegmentDTO) error {
 	err := u.repo.RemoveSegment(segmentData.Name)
-
 	if err != nil {
 		u.logger.Error(err.Error())
 		return errors.RemoveSegmentErr

@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/pkg/app"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/repository"
-	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase"
+	segmentRepository "github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/repository"
+	segmentUseCase "github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase"
+	userFsRepository "github.com/Inspirate789/backend-trainee-assignment-2023/internal/user/repository/fs"
+	userSqlRepository "github.com/Inspirate789/backend-trainee-assignment-2023/internal/user/repository/sql"
+	userUseCase "github.com/Inspirate789/backend-trainee-assignment-2023/internal/user/usecase"
 	"github.com/Inspirate789/backend-trainee-assignment-2023/pkg/influx"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -32,13 +35,13 @@ func readConfig() error {
 	return viper.ReadInConfig()
 }
 
-func runApp(webApp app.WebApp, logger *slog.Logger) {
+func runApp(webApp app.WebApp, port string, logger *slog.Logger) {
 	logger.Debug(fmt.Sprintf("web app starts at port %s with configuration: \n%v",
-		viper.GetString("PARSER_PORT"), viper.AllSettings()),
+		port, viper.AllSettings()),
 	)
 
 	go func() {
-		err := webApp.Start(viper.GetString("PARSER_PORT"))
+		err := webApp.Start(port)
 		if err != nil {
 			panic(err)
 		}
@@ -82,7 +85,7 @@ func main() {
 	defer iw.Close()
 
 	logLevel := new(slog.LevelVar)
-	logLevel.Set(slog.LevelInfo)
+	logLevel.Set(slog.LevelDebug)
 	logger := slog.New(slog.NewTextHandler(iw, &slog.HandlerOptions{
 		AddSource:   true,
 		Level:       logLevel.Level(),
@@ -100,10 +103,25 @@ func main() {
 		}
 	}(db)
 
-	repo := repository.NewSqlxSegmentRepository(db, logger)
-	useCase := usecase.NewSegmentUseCase(repo, logger)
-	webApp := app.NewFiberApp(viper.GetString("PARSER_PORT"), viper.GetString("API_PREFIX"), useCase, logger, logLevel.Level())
+	segmentRepo := segmentRepository.NewSqlxRepository(db, logger)
+	segmentUC := segmentUseCase.NewUseCase(segmentRepo, logger)
 
-	runApp(webApp, logger)
+	userSqlRepo := userSqlRepository.NewSqlxRepository(db, logger)
+	userFsRepo := userFsRepository.NewFsRepository(viper.GetString("VOLUME_PATH"), logger)
+	userUC := userUseCase.NewUseCase(userSqlRepo, userFsRepo, logger)
+
+	useCases := app.UseCases{
+		SegmentUseCase: segmentUC,
+		UserUseCase:    userUC,
+	}
+
+	settings := app.ApiSettings{
+		Port:      viper.GetString("PORT"),
+		ApiPrefix: viper.GetString("API_PREFIX"),
+	}
+
+	webApp := app.NewFiberApp(settings, useCases, logger)
+
+	runApp(webApp, settings.Port, logger)
 	shutdownApp(webApp, logger)
 }

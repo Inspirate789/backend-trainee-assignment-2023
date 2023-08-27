@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase"
+	"github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/usecase/dto"
 	"github.com/Inspirate789/backend-trainee-assignment-2023/pkg/sqlx_utils"
 	"github.com/jmoiron/sqlx"
 	"log/slog"
@@ -15,7 +16,7 @@ type sqlxSegmentRepository struct {
 	logger *slog.Logger
 }
 
-func NewSqlxSegmentRepository(db *sqlx.DB, logger *slog.Logger) usecase.SegmentRepository {
+func NewSqlxRepository(db *sqlx.DB, logger *slog.Logger) usecase.Repository {
 	return &sqlxSegmentRepository{
 		db:     db,
 		logger: logger.WithGroup("sqlxSegmentRepository"),
@@ -28,7 +29,7 @@ func (r *sqlxSegmentRepository) AddSegment(name string, userPercentage float64, 
 		"user_percentage": userPercentage,
 		"expire": sql.NullTime{
 			Time:  time.Now().Add(ttl),
-			Valid: ttl != usecase.NoTTL,
+			Valid: ttl != dto.NoTTL,
 		},
 	}
 
