@@ -5,6 +5,7 @@ import (
 	"fmt"
 	segmentDelivery "github.com/Inspirate789/backend-trainee-assignment-2023/internal/segment/delivery"
 	userDelivery "github.com/Inspirate789/backend-trainee-assignment-2023/internal/user/delivery"
+	_ "github.com/Inspirate789/backend-trainee-assignment-2023/swagger"
 	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
