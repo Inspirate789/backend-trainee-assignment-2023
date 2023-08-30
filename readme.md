@@ -16,7 +16,10 @@ make shutdown
 
 ## Работа с API
 Для приложения был разработан Swagger UI. 
-После запуска приложения он становится доступен по ссылке http://localhost:8080/swagger/inedex.html.
+После запуска приложения он становится доступен по ссылке http://localhost:8080/swagger/index.html.
 
-### ...
-Photo
+![Swagger UI](./assets/swagger.png)
+
+Логи системы хранятся не в контейнерах, а в InfluxDB (http://localhost:8086/, app_bucket).
+
+![Логи в InfluxDB](./assets/influx.png)

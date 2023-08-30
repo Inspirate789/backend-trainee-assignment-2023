@@ -11,11 +11,6 @@ type UserDTO struct {
 	UserID int `json:"user_id"`
 }
 
-// UserInputDTO godoc
-//
-// swagger:model
-type UserInputDTO UserDTO
-
 // UserSegmentsInputDTO godoc
 //
 // swagger:model
@@ -47,17 +42,4 @@ type UserSegmentsInputDTO struct {
 
 type UserSegmentsOutputDTO struct {
 	SegmentNames []string `json:"segment_names,omitempty"`
-}
-
-const YearMonthLayout = "2006-01"
-
-// UserHistoryInputDTO godoc
-//
-// swagger:model
-type UserHistoryInputDTO struct {
-	// YearMonth - Year and month in history
-	// required: true
-	// min length: 1
-	// example: "2023-08"
-	YearMonth string `json:"year_month"`
 }

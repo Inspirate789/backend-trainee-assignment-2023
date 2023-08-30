@@ -25,37 +25,7 @@ definitions:
           example: 50
         type: number
     type: object
-  github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentNameDTO:
-    properties:
-      name:
-        description: |-
-          Name
-          required: true
-          min length: 1
-          example: "AVITO_VOICE_MESSAGES"
-        type: string
-    type: object
   github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserDTO:
-    properties:
-      user_id:
-        description: |-
-          UserID
-          required: true
-          min: 1
-          example: 75
-        type: integer
-    type: object
-  github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserHistoryInputDTO:
-    properties:
-      year_month:
-        description: |-
-          YearMonth - Year and month in history
-          required: true
-          min length: 1
-          example: "2023-08"
-        type: string
-    type: object
-  github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO:
     properties:
       user_id:
         description: |-
@@ -118,16 +88,13 @@ info:
 paths:
   /segment:
     delete:
-      consumes:
-      - application/json
       description: delete segment
       parameters:
       - description: Segment name
-        in: body
-        name: SegmentDTO
+        in: query
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentNameDTO'
+        type: string
       responses:
         "200":
           description: OK
@@ -169,16 +136,13 @@ paths:
       - Segment API
   /user:
     delete:
-      consumes:
-      - application/json
       description: delete user
       parameters:
       - description: User ID
-        in: body
-        name: UserInputDTO
+        in: query
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO'
+        type: integer
       responses:
         "200":
           description: OK
@@ -220,17 +184,14 @@ paths:
       - User API
   /user/history:
     get:
-      consumes:
-      - application/json
       description: get the history of changing user segments; returns the web link
         to csv file with report
       parameters:
       - description: Year and month in history
-        in: body
-        name: UserHistoryInputDTO
+        in: query
+        name: year_month
         required: true
-        schema:
-          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserHistoryInputDTO'
+        type: string
       produces:
       - application/json
       responses:
@@ -251,16 +212,13 @@ paths:
       - User API
   /user/segments:
     get:
-      consumes:
-      - application/json
       description: get user segments
       parameters:
       - description: User ID
-        in: body
-        name: UserInputDTO
+        in: query
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO'
+        type: integer
       produces:
       - application/json
       responses:

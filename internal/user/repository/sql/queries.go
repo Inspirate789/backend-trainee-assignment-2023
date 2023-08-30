@@ -1,7 +1,7 @@
 package sql
 
 const (
-	insertUserQuery         = `insert into public.users(id) values (:user_id) on conflict do nothing;`
+	insertUserQuery         = `insert into public.users(id) values (:user_id) on conflict (id) do nothing;`
 	deleteUserQuery         = `delete from public.users u where u.id = :user_id;`
 	selectUserSegmentsQuery = `select public.select_user_segments(:user_id);`
 	insertUserSegmentsQuery = `call public.insert_user_segments(:names, :user_id, :expire);`

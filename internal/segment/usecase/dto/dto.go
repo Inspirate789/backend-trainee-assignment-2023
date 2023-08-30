@@ -44,14 +44,3 @@ type SegmentDTO struct {
 	// example: 72
 	TTL *int `json:"ttl,omitempty"`
 }
-
-// SegmentNameDTO godoc
-//
-// swagger:model
-type SegmentNameDTO struct {
-	// Name
-	// required: true
-	// min length: 1
-	// example: "AVITO_VOICE_MESSAGES"
-	Name string `json:"name"`
-}

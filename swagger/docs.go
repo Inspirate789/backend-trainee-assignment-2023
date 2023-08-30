@@ -60,22 +60,17 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "delete segment",
-                "consumes": [
-                    "application/json"
-                ],
                 "tags": [
                     "Segment API"
                 ],
                 "summary": "Delete segment.",
                 "parameters": [
                     {
+                        "type": "string",
                         "description": "Segment name",
-                        "name": "SegmentDTO",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentNameDTO"
-                        }
+                        "name": "name",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -138,22 +133,17 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "delete user",
-                "consumes": [
-                    "application/json"
-                ],
                 "tags": [
                     "User API"
                 ],
                 "summary": "Delete user.",
                 "parameters": [
                     {
+                        "type": "integer",
                         "description": "User ID",
-                        "name": "UserInputDTO",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO"
-                        }
+                        "name": "id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -178,9 +168,6 @@ const docTemplate = `{
         "/user/history": {
             "get": {
                 "description": "get the history of changing user segments; returns the web link to csv file with report",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -190,13 +177,11 @@ const docTemplate = `{
                 "summary": "Get the history of changing user segments.",
                 "parameters": [
                     {
+                        "type": "string",
                         "description": "Year and month in history",
-                        "name": "UserHistoryInputDTO",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserHistoryInputDTO"
-                        }
+                        "name": "year_month",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -224,9 +209,6 @@ const docTemplate = `{
         "/user/segments": {
             "get": {
                 "description": "get user segments",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
@@ -236,13 +218,11 @@ const docTemplate = `{
                 "summary": "Get user segments.",
                 "parameters": [
                     {
+                        "type": "integer",
                         "description": "User ID",
-                        "name": "UserInputDTO",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO"
-                        }
+                        "name": "id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -324,34 +304,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Inspirate789_backend-trainee-assignment-2023_internal_segment_usecase_dto.SegmentNameDTO": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "description": "Name\nrequired: true\nmin length: 1\nexample: \"AVITO_VOICE_MESSAGES\"",
-                    "type": "string"
-                }
-            }
-        },
         "github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserDTO": {
-            "type": "object",
-            "properties": {
-                "user_id": {
-                    "description": "UserID\nrequired: true\nmin: 1\nexample: 75",
-                    "type": "integer"
-                }
-            }
-        },
-        "github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserHistoryInputDTO": {
-            "type": "object",
-            "properties": {
-                "year_month": {
-                    "description": "YearMonth - Year and month in history\nrequired: true\nmin length: 1\nexample: \"2023-08\"",
-                    "type": "string"
-                }
-            }
-        },
-        "github_com_Inspirate789_backend-trainee-assignment-2023_internal_user_usecase_dto.UserInputDTO": {
             "type": "object",
             "properties": {
                 "user_id": {

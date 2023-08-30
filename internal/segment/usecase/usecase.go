@@ -34,13 +34,13 @@ func (u *segmentUseCase) AddSegment(segmentData dto.SegmentDTO) error {
 	return nil
 }
 
-func (u *segmentUseCase) RemoveSegment(segmentData dto.SegmentNameDTO) error {
-	err := u.repo.RemoveSegment(segmentData.Name)
+func (u *segmentUseCase) RemoveSegment(segmentName string) error {
+	err := u.repo.RemoveSegment(segmentName)
 	if err != nil {
 		u.logger.Error(err.Error())
 		return errors.RemoveSegmentErr
 	}
-	u.logger.Info("segment removed", slog.String("name", segmentData.Name))
+	u.logger.Info("segment removed", slog.String("name", segmentName))
 
 	return nil
 }

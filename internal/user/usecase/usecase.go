@@ -15,6 +15,8 @@ type userUseCase struct {
 	logger  *slog.Logger
 }
 
+const YearMonthLayout = "2006-01"
+
 func NewUseCase(sqlRepo SqlRepository, fsRepo FsRepository, logger *slog.Logger) delivery.UseCase {
 	return &userUseCase{
 		sqlRepo: sqlRepo,
@@ -34,13 +36,13 @@ func (u *userUseCase) AddUser(userData userDTO.UserDTO) error {
 	return nil
 }
 
-func (u *userUseCase) RemoveUser(userData userDTO.UserInputDTO) error {
-	err := u.sqlRepo.AddUser(userData.UserID)
+func (u *userUseCase) RemoveUser(userID int) error {
+	err := u.sqlRepo.AddUser(userID)
 	if err != nil {
 		u.logger.Error(err.Error())
 		return errors.RemoveUserErr
 	}
-	u.logger.Info("user removed", slog.Int("user_id", userData.UserID))
+	u.logger.Info("user removed", slog.Int("user_id", userID))
 
 	return nil
 }
@@ -66,19 +68,19 @@ func (u *userUseCase) ChangeUserSegments(userData userDTO.UserSegmentsInputDTO) 
 	return nil
 }
 
-func (u *userUseCase) GetUserSegments(userData userDTO.UserInputDTO) (userDTO.UserSegmentsOutputDTO, error) {
-	segments, err := u.sqlRepo.GetUserSegments(userData.UserID)
+func (u *userUseCase) GetUserSegments(userID int) (userDTO.UserSegmentsOutputDTO, error) {
+	segments, err := u.sqlRepo.GetUserSegments(userID)
 	if err != nil {
 		u.logger.Error(err.Error())
 		return userDTO.UserSegmentsOutputDTO{}, errors.GetUserSegmentsErr
 	}
-	u.logger.Info("user segments received", slog.Int("user_id", userData.UserID))
+	u.logger.Info("user segments received", slog.Int("user_id", userID))
 
 	return userDTO.UserSegmentsOutputDTO{SegmentNames: segments}, nil
 }
 
-func (u *userUseCase) SaveUserHistory(userData userDTO.UserHistoryInputDTO, reportID string) (string, error) {
-	date, err := time.Parse(userDTO.YearMonthLayout, userData.YearMonth)
+func (u *userUseCase) SaveUserHistory(yearMonth, reportID string) (string, error) {
+	date, err := time.Parse(YearMonthLayout, yearMonth)
 	if err != nil {
 		u.logger.Error(err.Error())
 		return "", errors.ParseDateErr
